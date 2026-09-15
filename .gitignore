@@ -2,9 +2,11 @@ __pycache__/
 *.pyc
 .venv/
 .env
-uploads/previews/*
-uploads/files/*
-!uploads/previews/.gitkeep
-!uploads/files/.gitkeep
+backend/uploads/previews/*
+backend/uploads/files/*
+!backend/uploads/previews/.gitkeep
+!backend/uploads/files/.gitkeep
 node_modules/
 dist/
+*.log
+_dev.log*
