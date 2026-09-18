@@ -60,10 +60,16 @@ async def lifespan(app: FastAPI):
             log.warning(f"Redis close failed: {e}")
 
 
+# Production frontend(s). Always allowed, in addition to FRONTEND_URL env.
+PROD_FRONTEND_ORIGINS = [
+    "https://codexchange-platform.vercel.app",
+]
+
+
 def _allowed_origins() -> list:
-    """Local dev origins + every origin in FRONTEND_URL (comma-separated)."""
+    """Local dev origins + FRONTEND_URL (comma-separated) + production."""
     origins: list = []
-    for origin in (settings.FRONTEND_URL or "").split(","):
+    for origin in list(PROD_FRONTEND_ORIGINS) + (settings.FRONTEND_URL or "").split(","):
         origin = origin.strip().rstrip("/")
         if origin and origin not in origins:
             origins.append(origin)

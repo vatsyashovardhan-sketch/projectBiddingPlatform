@@ -1,190 +1,96 @@
-Yes. Since your code already has an **in-memory fallback**, you don't need to change the database code right now.
+Yes. Your frontend is:
 
-Your Render logs confirm this:
+[https://codexchange-platform.vercel.app/](https://codexchange-platform.vercel.app/?utm_source=chatgpt.com)
 
-```text
-MongoDB unavailable, using in-memory store
-```
+and your backend is live at:
 
-So the goal is simply to make Render **use that fallback intentionally** and get your frontend talking to the deployed backend.
+[https://projectbiddingplatform.onrender.com](https://projectbiddingplatform.onrender.com?utm_source=chatgpt.com)
 
-### 1. You don't need to add `MONGODB_URI`
+The `OPTIONS /listings → 400` in your Render logs means your FastAPI CORS configuration needs to allow the Vercel origin.
 
-Leave MongoDB environment variables unset for now.
+### 1. Find your CORS code
 
-Your app will detect that MongoDB isn't available and use the in-memory store.
-
-### 2. Fix `JWT_SECRET`
-
-Your logs currently show:
+In your backend, search:
 
 ```text
-WARNING:app:JWT_SECRET is the default value
+CORSMiddleware
 ```
 
-This is more important because your authentication uses JWT.
+You'll probably have something similar to:
 
-In Render:
-
-**projectBiddingPlatform → Environment → Environment Variables**
-
-Add:
-
-```text
-Key:
-JWT_SECRET
-
-Value:
+```python
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 ```
 
-Generate the value locally with:
-
-```bash
-python -c "import secrets; print(secrets.token_urlsafe(64))"
-```
-
-You'll get something like:
-
-```text
-Q7...very-long-random-string...
-```
-
-Copy that into Render.
-
-**Don't use the example above as your actual secret.**
-
-### 3. Save the environment variable
-
-Click **Save Changes**.
-
-Render should automatically redeploy.
-
-### 4. Check the deployment logs
-
-You should see:
-
-```text
-INFO: Application startup complete.
-INFO: Uvicorn running on http://0.0.0.0:10000
-==> Your service is live 🎉
-```
-
-You may still see:
-
-```text
-MongoDB unavailable, using in-memory store
-```
-
-That's **expected for now**.
-
-### 5. Test your backend
-
-Your backend URL is:
-
-[projectBiddingPlatform API](https://projectbiddingplatform.onrender.com?utm_source=chatgpt.com)
-
-Open it in your browser.
-
-You already confirmed that:
-
-```text
-GET / HTTP/1.1 200 OK
-```
-
-so the server itself is working.
-
-If your FastAPI app has Swagger enabled, try:
-
-```text
-https://projectbiddingplatform.onrender.com/docs
-```
-
-You should see the FastAPI Swagger UI.
-
-### 6. Connect your Vercel frontend
-
-This is probably your next important step.
-
-Your frontend currently likely has something like:
-
-```javascript
-const API_URL = "http://localhost:8000";
-```
-
-or:
-
-```javascript
-baseURL: "http://localhost:8000"
-```
+### 2. Add your Vercel URL
 
 Change it to:
 
-```javascript
-const API_URL = "https://projectbiddingplatform.onrender.com";
+```python
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "https://codexchange-platform.vercel.app",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 ```
 
-Better, use a Vercel environment variable:
+**Important:** don't put a `/` at the end:
 
 ```text
-VITE_API_URL=https://projectbiddingplatform.onrender.com
+https://codexchange-platform.vercel.app
 ```
 
-if you're using Vite.
-
-Then your Axios instance can use:
-
-```javascript
-baseURL: import.meta.env.VITE_API_URL
-```
-
-If you're using Next.js, use:
+not:
 
 ```text
-NEXT_PUBLIC_API_URL=https://projectbiddingplatform.onrender.com
+https://codexchange-platform.vercel.app/
 ```
 
-and:
-
-```javascript
-baseURL: process.env.NEXT_PUBLIC_API_URL
-```
-
-### 7. Redeploy the frontend
-
-After changing the API URL:
+### 3. Push the change
 
 ```bash
 git add .
-git commit -m "chore: connect frontend to deployed API"
-git push
+git commit -m "fix: allow Vercel frontend in CORS"
+git push origin main
 ```
 
-Vercel should automatically redeploy.
+Render should automatically deploy the new commit.
 
-### Important limitation
+### 4. Test again
 
-Until you add MongoDB:
+Once Render says **Deploy succeeded**, open:
+
+[CodeXchange frontend](https://codexchange-platform.vercel.app/?utm_source=chatgpt.com)
+
+Then try whatever action was loading `/listings`.
+
+Your Render logs should change from:
 
 ```text
-Frontend
-   ↓
-Vercel
-   ↓
-Render FastAPI
-   ↓
-In-memory storage
+OPTIONS /listings 400 Bad Request
 ```
 
-So if Render restarts, **users, projects, bids, etc. stored in memory can disappear**.
-
-For now, that's fine for a demo. Later you can replace:
+to something like:
 
 ```text
-In-memory store
-       ↓
-MongoDB Atlas
+OPTIONS /listings 200 OK
+GET /listings 200 OK
 ```
 
-without necessarily changing your frontend/API contracts.
+Your backend itself is already responding correctly—the live API currently returns `{"name":"Project Bidding API","docs":"/docs","health":"/health"}`. 
 
-**Your immediate next step is therefore: add `JWT_SECRET` → redeploy Render → open `/docs` → connect your Vercel frontend to the Render URL.**
+If you paste your **current `main.py` CORS section**, I can tell you the exact lines to replace.
