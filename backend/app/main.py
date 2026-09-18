@@ -60,11 +60,24 @@ async def lifespan(app: FastAPI):
             log.warning(f"Redis close failed: {e}")
 
 
+def _allowed_origins() -> list:
+    """Local dev origins + every origin in FRONTEND_URL (comma-separated)."""
+    origins: list = []
+    for origin in (settings.FRONTEND_URL or "").split(","):
+        origin = origin.strip().rstrip("/")
+        if origin and origin not in origins:
+            origins.append(origin)
+    for origin in ("http://localhost:5173", "http://127.0.0.1:5173"):
+        if origin not in origins:
+            origins.append(origin)
+    return origins
+
+
 app = FastAPI(title="Project Bidding Platform", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.FRONTEND_URL, "http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=_allowed_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

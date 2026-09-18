@@ -24,14 +24,24 @@ async function refreshAccess() {
 
 export async function api(path, opts = {}, retry = true) {
   const { access } = tokens();
-  const res = await fetch(`${BASE}${path}`, {
-    ...opts,
-    headers: {
-      ...(opts.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
-      ...(opts.headers || {}),
-      ...(access ? { Authorization: `Bearer ${access}` } : {}),
-    },
-  });
+  let res;
+  try {
+    res = await fetch(`${BASE}${path}`, {
+      ...opts,
+      headers: {
+        ...(opts.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
+        ...(opts.headers || {}),
+        ...(access ? { Authorization: `Bearer ${access}` } : {}),
+      },
+    });
+  } catch (e) {
+    // Network-level failure: backend down, wrong VITE_API_URL, or a
+    // browser CORS block (all surface as TypeError: Failed to fetch).
+    throw new Error(
+      `Cannot reach the backend at ${BASE}. Is it running, is VITE_API_URL correct, ` +
+      `and is this site's origin allowed by the backend's FRONTEND_URL (CORS)?`
+    );
+  }
   if (res.status === 401 && retry) {
     const next = await refreshAccess();
     if (next) return api(path, opts, false);
