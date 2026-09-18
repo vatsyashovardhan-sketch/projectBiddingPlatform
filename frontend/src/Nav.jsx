@@ -7,6 +7,13 @@ export function Nav() {
   const { user, logout } = useAuth();
   const nav = useNavigate();
   const [unread, setUnread] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
   useEffect(() => {
     if (!user) return;
     api('/notifications').then(n => setUnread(n.unread)).catch(() => {});
@@ -17,7 +24,7 @@ export function Nav() {
   const canSell = role === 'seller' || role === 'both' || role === 'admin';
   const dashLabel = role === 'buyer' ? 'My Orders' : role === 'seller' ? 'My Shop' : 'Dashboard';
   return (
-    <nav className="nav">
+    <nav className={`nav${scrolled ? ' scrolled' : ''}`}>
       <Link to="/" className="brand">ProjectBidding</Link>
       <div className="links">
         <Link to="/">Browse</Link>

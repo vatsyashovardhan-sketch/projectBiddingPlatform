@@ -1,0 +1,44 @@
+Restyle this website using the following design system. Apply it consistently across every page/section — don't leave any screen in the old style.
+
+COLOR PALETTE ("Teal Trust")
+- Primary (dominant, ~60-70% of visual weight): #028090 (deep teal)
+- Secondary: #00A896 (seafoam)
+- Accent (use sparingly — stat numbers, small highlights, icon fills only): #02C39A (mint)
+- Dark background (hero + closing/footer sections): #013440
+- Body text on light backgrounds: #16262B
+- Muted/caption text: #5B7278
+- Light card/section background: #F2F7F7
+- Pure white: #FFFFFF
+
+TYPOGRAPHY
+- Headings: a serif display font (e.g. "Cambria", or "Playfair Display" / "Source Serif 4" if using web fonts) — bold weight, large size jumps between heading levels.
+- Body: a clean sans-serif ("Calibri", "Inter", or system-ui) at 15-16px, comfortable line-height (~1.5).
+- Small kicker labels above section headings: uppercase, small (11-12px), bold, letter-spacing +2px, colored in the secondary/accent tone.
+
+LAYOUT PRINCIPLES
+- Alternate dark and light sections ("sandwich" structure): hero and final CTA/footer sections use the dark (#013440) background with white/mint text; all content sections in between are light (white or #F2F7F7).
+- One color should visually dominate the page (teal), with mint used only for small emphasis — numbers, icon fills, underlines on hover. Never split attention evenly across 3+ colors.
+- Do NOT use accent stripes, colored borders on one edge, or underlines below headings — use whitespace, background tint, or shadow instead to separate content.
+- Generous whitespace: minimum 32-48px padding around major blocks, consistent spacing scale (8/16/24/32/48/64px), never cramped.
+- Vary section layouts (don't repeat the same grid everywhere): mix a 2-column text+image section, a 2x2 icon-grid feature section, an icon+text stacked list section, and a full-width diagram/image section, and a dark stat-band section.
+
+VISUAL MOTIF (repeat everywhere for cohesion)
+- Circles: use soft, large, semi-transparent blurred circles as background decoration in dark sections (hero, footer) — think layered translucent teal/seafoam circles bleeding off the edge of the viewport.
+- Icons: small icon or 2-3 letter monogram inside a solid-color filled circle (rotate through primary/secondary/accent/dark-teal fills across items) — used consistently for feature lists and step-by-step content.
+
+COMPONENTS
+- Cards: light tinted background (#F2F7F7), no border, soft drop shadow, rounded corners (~12px radius). On hover: lift slightly (translateY -4px) with a deeper shadow — smooth 200-250ms transition.
+- Buttons: solid primary teal fill, white text, rounded (8-10px), on hover darken slightly and add a subtle shadow.
+- Stat callouts: oversized numbers (48-72px, bold, mint or white depending on background) with a small muted label below. Animate these to count up from 0 when scrolled into view.
+- Navigation: sticky header, transparent over the hero, transitions to solid dark/white with a subtle shadow once the user scrolls past the hero.
+
+MOTION (this is where the site should go beyond a static deck/print design)
+- Fade+slide-up entrance animations for sections as they scroll into view (stagger children by ~80-100ms).
+- Animated count-up for all stat numbers on first scroll into view.
+- Smooth hover lift + shadow on all cards and buttons.
+- Subtle slow-drifting animation (very slight scale/position loop, 10-20s ease) on the background decorative circles in dark sections — not distracting, just alive.
+
+ACCESSIBILITY
+- Maintain WCAG AA contrast: white/mint text only on the dark #013440 background; dark ink text only on white/light backgrounds. Never place teal text on teal backgrounds.
+
+Apply this system to: [list your actual pages/sections here, e.g. "the homepage hero, features section, pricing table, and footer"].

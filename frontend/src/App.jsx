@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './AuthContext';
 import { Nav } from './Nav';
+import { initMotion } from './motion';
 import { Browse } from './pages/Browse';
 import { ListingDetail } from './pages/ListingDetail';
 import { Login, Signup, Profile } from './pages/Auth';
@@ -16,6 +18,7 @@ import { Sellers } from './pages/Sellers';
 import './styles.css';
 
 export default function App() {
+  useEffect(() => initMotion(), []);
   return (
     <BrowserRouter>
       <AuthProvider>
@@ -40,6 +43,24 @@ export default function App() {
             <Route path="/sellers" element={<Sellers />} />
           </Routes>
         </main>
+        <footer className="footer">
+          <div className="footer-inner">
+            <div>
+              <span className="kicker">Teal Trust</span>
+              <span className="brand">ProjectBidding</span>
+              <p>Buy and sell ready-made project code —<br />with bidding, escrow-style payouts, and reviews.</p>
+            </div>
+            <div>
+              <span className="kicker">Marketplace</span>
+              <p><a href="/">Browse projects</a><br /><a href="/sellers">Top sellers</a><br /><a href="/new">Sell a project</a></p>
+            </div>
+            <div>
+              <span className="kicker">Account</span>
+              <p><a href="/login">Login</a><br /><a href="/signup">Sign up</a><br /><a href="/dashboard">Dashboard</a></p>
+            </div>
+          </div>
+          <p className="footer-copy">© 2026 ProjectBidding · Demo marketplace (mock payments until Stripe keys are set)</p>
+        </footer>
       </AuthProvider>
     </BrowserRouter>
   );

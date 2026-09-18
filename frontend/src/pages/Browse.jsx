@@ -95,6 +95,7 @@ export function Browse() {
     <div>
       {!user && (
         <div className="hero">
+          <span className="kicker">Marketplace</span>
           <h2>Buy & sell student projects</h2>
           <p className="muted">Browse freely — login to bid, buy, or sell your own work.</p>
           <div className="row">
@@ -105,6 +106,7 @@ export function Browse() {
       )}
       {user?.role === 'seller' && (
         <div className="hero seller">
+          <span className="kicker">Seller studio</span>
           <h2>Your shop is open 🏪</h2>
           <p className="muted">List a new project or check incoming orders.</p>
           <div className="row">
@@ -115,6 +117,7 @@ export function Browse() {
       )}
       {user?.role === 'buyer' && (
         <div className="hero buyer">
+          <span className="kicker">Buyer hub</span>
           <h2>Find your next project 🛒</h2>
           <p className="muted">Bid on open listings or buy instantly — track it all in My Orders.</p>
           <div className="row">
