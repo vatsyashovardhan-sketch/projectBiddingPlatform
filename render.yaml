@@ -1,0 +1,21 @@
+# Render Blueprint for the ProjectBidding backend.
+# If your service was created manually, either create a new Blueprint
+# from this file or mirror these settings in the Dashboard.
+services:
+  - type: web
+    name: projectbiddingplatform
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    # IMPORTANT: must bind Render's $PORT (default 10000), not a fixed port.
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      # Fully qualified Python version (takes precedence over .python-version).
+      - key: PYTHON_VERSION
+        value: 3.12.11
+      # Auto-generated on first deploy; never commit a real secret.
+      - key: JWT_SECRET
+        generateValue: true
+      # Production frontend origin(s) for CORS (comma-separated if many).
+      - key: FRONTEND_URL
+        value: https://codexchange-platform.vercel.app
