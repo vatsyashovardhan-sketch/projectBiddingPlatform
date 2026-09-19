@@ -1,96 +1,139 @@
-Yes. Your frontend is:
+On website :
+ProjectBidding
+Browse
+Sellers
+Login
+Sign up
+Marketplace
+Buy & sell student projects
+Browse freely — login to bid, buy, or sell your own work.
 
-[https://codexchange-platform.vercel.app/](https://codexchange-platform.vercel.app/?utm_source=chatgpt.com)
+Login
+Sign up free
+Browse projects (0)
+Search title/description...
 
-and your backend is live at:
+All categories
+Tech (e.g. react)
+Min $
+Max $
 
-[https://projectbiddingplatform.onrender.com](https://projectbiddingplatform.onrender.com?utm_source=chatgpt.com)
+Newest
 
-The `OPTIONS /listings → 400` in your Render logs means your FastAPI CORS configuration needs to allow the Vercel origin.
+Any seller rating
+open to bids
+Search
+Clear
+Cannot reach the backend at http://localhost:8000. Is it running, is VITE_API_URL correct, and is this site's origin allowed by the backend's FRONTEND_URL (CORS)? Retry
 
-### 1. Find your CORS code
+Teal Trust
+ProjectBidding
+Buy and sell ready-made project code —
+with bidding, escrow-style payouts, and reviews.
 
-In your backend, search:
+Marketplace
+Browse projects
+Top sellers
+Sell a project
 
-```text
-CORSMiddleware
-```
+Account
+Login
+Sign up
+Dashboard
 
-You'll probably have something similar to:
+© 2026 ProjectBidding · Demo marketplace (mock payments until Stripe keys are set)
 
-```python
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-```
 
-### 2. Add your Vercel URL
+On vercel :
 
-Change it to:
+Skip to content
 
-```python
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://localhost:5174",
-        "https://codexchange-platform.vercel.app",
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-```
+Find
+F
 
-**Important:** don't put a `/` at the end:
+Overview
+Deployments
+Logs
+Analytics
+Speed Insights
+Observability
+Firewall
+CDN
+Environment Variables
+Domains
+Connect
+Integrations
+Storage
+Flags
+Agent
+AI Gateway
+Sandboxes
+Workflows
+Images
+Usage
+Support
+Settings
+Free Domain with Pro
+Upgrade to Pro and get a free domain for your first year.
 
-```text
-https://codexchange-platform.vercel.app
-```
+Avatar for vatsforever006-1548
+vatsforever006-1548
 
-not:
 
-```text
-https://codexchange-platform.vercel.app/
-```
+Deployments
+9C5Zha15p
 
-### 3. Push the change
+Deployment
+Logs
+Resources
+Source
+Open Graph
+Deployment Details
+Created
+github/jyotitiwari-0608
+jyotitiwari-0608
+1m ago
+Status
+Ready
+Latest
+Duration
+6s
+1m ago
+Environment
+Production
+Current
+Domains
+codexchange-platform.vercel.app
++1
+project-bidding-platform-git-main-code-xchange.vercel.app
+project-bidding-platform-5d9fch38q-code-xchange.vercel.app
+Source
+main
+39f10ca
+Add repo-root .python-version so Render detects it
 
-```bash
-git add .
-git commit -m "fix: allow Vercel frontend in CORS"
-git push origin main
-```
+Deployment Settings
+3 Recommendations
+Build Logs
+6s
+Deployment Summary
+Deployment Checks
+Assigning Custom Domains
+Runtime Logs
 
-Render should automatically deploy the new commit.
+View and debug runtime logs & errors
 
-### 4. Test again
+Observability
 
-Once Render says **Deploy succeeded**, open:
+Monitor app health & performance
 
-[CodeXchange frontend](https://codexchange-platform.vercel.app/?utm_source=chatgpt.com)
+Speed Insights
 
-Then try whatever action was loading `/listings`.
+Not Enabled
+Performance metrics from real users
 
-Your Render logs should change from:
+Web Analytics
 
-```text
-OPTIONS /listings 400 Bad Request
-```
+Not Enabled
+Analyze visitors & traffic in real-time
 
-to something like:
-
-```text
-OPTIONS /listings 200 OK
-GET /listings 200 OK
-```
-
-Your backend itself is already responding correctly—the live API currently returns `{"name":"Project Bidding API","docs":"/docs","health":"/health"}`. 
-
-If you paste your **current `main.py` CORS section**, I can tell you the exact lines to replace.

@@ -1,4 +1,8 @@
-const BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// Explicit VITE_API_URL wins. Otherwise: local dev talks to the local
+// backend, while any deployed preview/production page talks to Render.
+const PROD_API_URL = 'https://projectbiddingplatform.onrender.com';
+const onLocalhost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+const BASE = import.meta.env.VITE_API_URL || (onLocalhost ? 'http://localhost:8000' : PROD_API_URL);
 
 function tokens() {
   return {
